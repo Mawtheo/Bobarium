@@ -26,23 +26,6 @@ robot = DriveBase(left_m, right_m, wheel_diameter=55.5, axle_track=104)
 # Son de boot
 ev3.speaker.play_file(SoundFile.READY)
 
-#led color
-ev3.light.on(Color.RED)
-wait(10000)
-
-light_pressed = True
-def light(light_pressed):
-    if light_pressed is True:
-        ev3.light.off()
-        wait(10000)
-
-        light_pressed = False
-    else:
-        ev3.light.on(Color.RED)
-        wait(10000)
-        light_pressed = True
-
-
 # Fonctions des ordres 
 def avancer():
     robot.straight(1000)
@@ -59,14 +42,6 @@ def gauche():
 def droite():
     robot.turn(10)
 
-#capteur
-def distance():
-    ultrasonic=UltrasonicSensor(Port.S2)
-    distance=ultrasonic.distance(silent=True)
-    print(distance)
-    
-
-# Monter et descendre la barres
 def barre():
     medium_m.run(-1000)
     wait(1000)
@@ -74,6 +49,17 @@ def barre():
     medium_m.run(+1000)
     wait(1000)
     medium_m.stop()
+
+def distance():
+    ultrasonic = UltrasonicSensor(Port.S2)
+    distance = ultrasonic.distance(silent=True)
+    print(f"distance = {distance} mm")
+
+def led_on():
+    ev3.light.on(Color.RED)
+
+def led_off():
+    ev3.light.off()
 
 # Adresse ip du robot
 ADRESSE = "192.168.1.156"
@@ -97,9 +83,9 @@ def run():
             fin = True
         
         # Commandes du robot
-        if requete.decode() == "haut":
+        if requete.decode() == "avancer":
             avancer()
-        if requete.decode() == "bas":
+        if requete.decode() == "reculer":
             reculer()
         if requete.decode() == "gauche":
             gauche()
@@ -111,8 +97,10 @@ def run():
             barre()
         if requete.decode() == "distance":
             distance()
-        if requete.decode() == "light":
-            light(light_pressed)
+        if requete.decode() == "led_on":
+            led_on()
+        if requete.decode() == "led_off":
+            led_off()
 
         # Préparation et envoi de la réponse
         reponse = "OK"

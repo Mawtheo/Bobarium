@@ -35,9 +35,9 @@ while fin is False:
         # Envoi d'un message texte
         if event.type == pg.KEYDOWN:
                 if event.key == pg.K_UP:
-                    requete = 'haut'
+                    requete = 'avancer'
                 if event.key == pg.K_DOWN:
-                    requete = 'bas'
+                    requete = 'reculer'
                 if event.key == pg.K_LEFT:
                     requete = 'gauche'
                 if event.key == pg.K_RIGHT:
@@ -49,7 +49,10 @@ while fin is False:
                 if event.key == pg.K_KP0:
                     requete = 'distance'
                 if event.key == pg.K_KP1:
-                    requete = 'light'
+                    requete = 'led_on'
+                if event.key == pg.K_KP2:
+                    requete = 'led_off'
+
     #Vérifie que le message n'est pas vide
     if requete != "":
         client.send(requete.encode())
