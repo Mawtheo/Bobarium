@@ -53,7 +53,7 @@ def barre():
 def distance():
     ultrasonic = UltrasonicSensor(Port.S2)
     distance = ultrasonic.distance(silent=True)
-    print(f"distance = {distance} mm")
+    print("distance", distance, "mm")
 
 def led_on():
     ev3.light.on(Color.RED)
@@ -61,8 +61,18 @@ def led_on():
 def led_off():
     ev3.light.off()
 
+def bobarium():
+    lazer=ColorSensor(Port.S3)
+    taux = lazer.reflection()
+    if taux <= 10:
+        print("bobarium détecté", taux)
+    else:
+        print(taux)
+
+
+
 # Adresse ip du robot
-ADRESSE = "192.168.1.156"
+ADRESSE = "192.168.1.153"
 PORT = 1664
 
 def run():
@@ -101,6 +111,8 @@ def run():
             led_on()
         if requete.decode() == "led_off":
             led_off()
+        if requete.decode() == "bobarium":
+            bobarium()
 
         # Préparation et envoi de la réponse
         reponse = "OK"

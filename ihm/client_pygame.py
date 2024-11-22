@@ -12,7 +12,7 @@ screen = pg.display.set_mode((800,400))
 pg.display.set_caption('BOBARIUM')
 
 # Adresse ip du robot
-HOST = "192.168.1.156"
+HOST = "192.168.1.153"
 PORT = 1664
 
 # Création de la socket
@@ -52,7 +52,9 @@ while fin is False:
                     requete = 'led_on'
                 if event.key == pg.K_KP2:
                     requete = 'led_off'
-
+                if event.key == pg.K_KP3:
+                    requete = 'bobarium'
+                    
     #Vérifie que le message n'est pas vide
     if requete != "":
         client.send(requete.encode())
