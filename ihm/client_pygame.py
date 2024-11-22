@@ -54,7 +54,9 @@ while fin is False:
                     requete = 'led_off'
                 if event.key == pg.K_KP3:
                     requete = 'bobarium'
-                    
+                if event.key == pg.K_KP4:
+                    requete = 'gyro'
+
     #Vérifie que le message n'est pas vide
     if requete != "":
         client.send(requete.encode())

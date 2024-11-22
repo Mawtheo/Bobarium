@@ -21,21 +21,27 @@ ev3 = EV3Brick()
 left_m = Motor(Port.A, Direction.CLOCKWISE)
 right_m = Motor(Port.C, Direction.CLOCKWISE)
 medium_m = Motor(Port.B, Direction.CLOCKWISE)
-robot = DriveBase(left_m, right_m, wheel_diameter=55.5, axle_track=104)
+#robot = DriveBase(left_m, right_m, wheel_diameter=55.5, axle_track=104)
 
 # Son de boot
 ev3.speaker.play_file(SoundFile.READY)
 
 # Fonctions des ordres 
 def avancer():
-    robot.straight(1000)
+    #robot.straight(1000)
+    left_m.run(100)
+    right_m.run(100)
 
 def reculer():
-    robot.straight(-1000)
+    #robot.straight(-1000)
+    left_m.run(-100)
+    right_m.run(-100)
 
 def stop():
     robot.stop()
-    
+    left_m(0)
+    right_m(0)
+
 def gauche():
     robot.turn(-10)
 
@@ -69,7 +75,10 @@ def bobarium():
     else:
         print(taux)
 
-
+def gyro():
+    angle = GyroSensor(Port.S4)
+    angle.speed()
+    print(angle)
 
 # Adresse ip du robot
 ADRESSE = "192.168.1.153"
@@ -113,6 +122,8 @@ def run():
             led_off()
         if requete.decode() == "bobarium":
             bobarium()
+        if requete.decode() == "gyro":
+            gyro()
 
         # Préparation et envoi de la réponse
         reponse = "OK"
