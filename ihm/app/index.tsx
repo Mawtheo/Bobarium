@@ -1,4 +1,8 @@
-import { Text, View, Button, Alert } from "react-native";
+/**
+ * BTS-CIEL2 :: CLIENT
+ */
+
+import { Text, View, Button} from "react-native";
 
 // Adresse et port du serveur EV3
 const ADRESSE = "192.168.1.153";
