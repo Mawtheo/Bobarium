@@ -2,7 +2,7 @@
  * BTS-CIEL2 :: CLIENT
  */
 
-import { Text, View, Button} from "react-native";
+import { Text, View, Button, StyleSheet} from "react-native";
 
 // Adresse et port du serveur EV3
 const ADRESSE = "192.168.1.153";
@@ -23,18 +23,13 @@ export default function Index() {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View style={styles.container}>
       <Text>Théo et Valérian vous présente Bobarium !</Text>
-      <Button title="Avancer" onPress={() => sendCommand("avancer")} />
-      <Button title="Reculer" onPress={() => sendCommand("reculer")} />
-      <Button title="Gauche" onPress={() => sendCommand("gauche")} />
-      <Button title="Droite" onPress={() => sendCommand("droite")} />
+      <Button title="Avancer" color="red" onPress={() => sendCommand("avancer")} />
+      <Button title="Reculer" color="red" onPress={() => sendCommand("reculer")} />
+      <Button title="Gauche" color="red" onPress={() => sendCommand("gauche")} />
+      <Button title="Droite" color="red" onPress={() => sendCommand("droite")} />
+
       <Button title="Stop" onPress={() => sendCommand("stop")} />
       <Button title="Barre" onPress={() => sendCommand("barre")} />
       <Button title="Distance" onPress={() => sendCommand("distance")} />
@@ -45,3 +40,11 @@ export default function Index() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  }
+});
