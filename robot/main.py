@@ -34,29 +34,30 @@ ev3.speaker.play_file(SoundFile.READY)
 
 # Fonctions des ordres 
 def avancer():
-    robot.straight(1000)
+    left_m.run(1000)
+    right_m.run(1000)
 
 def reculer():
-    robot.straight(-1000)
+    left_m.run(-1000)
+    right_m.run(-1000)
+    
+def gauche():
+    left_m.run(-150)
+    right_m.run(150)
+
+def droite():
+    left_m.run(150)
+    right_m.run(-150)
 
 def stop():
     robot.stop()
-    
-def gauche():
-    robot.turn(-10)
-
-def droite():
-    robot.turn(10)
-
-def stop():
-    robot.hold()
 
 # Lever / Baisser la barre
 def barre():
     medium_m.run(-1000)
     wait(1000)
     medium_m.stop()
-    medium_m.run(+1000)
+    medium_m.run(1000)
     wait(1000)
     medium_m.stop()
 
@@ -68,7 +69,7 @@ def led_off():
 
 # Capteur ultrason permet de détecter les obstacles 
 def distance():
-    distance = ultrasonic.distance(silent=True)
+    distance = ultrasonic.distance(silent=False)
     print("distance = ", distance, "mm")
 
 # Taux de bobarium
@@ -80,18 +81,18 @@ def bobarium():
         print("taux = ", taux, "%")
 
 # Position angulaire du robot en degrès
-def gyro():
-    angle = gyrosensor.speed()
-    print("angle = ", angle, "°")
+def angle_robot():
+    angle = gyrosensor.angle()
+    print("angle robot = ", angle, "°")
 
-    angle_G = left_m.speed()
-    print("angle = ", angle_G, "°")
-
-    angle_R = right_m.speed()
-    print("angle = ", angle_R, "°")
+def angle_roue():
+    angle_droit = right_m.angle()
+    angle_gauche = left_m.angle()
+    print("angle roue droite = ", angle_droit, "°")
+    print("angle roue gauche = ", angle_gauche, "°")
 
 # Adresse IP du robot
-ADRESSE = "192.168.1.166"
+ADRESSE = "192.168.1.170"
 PORT = 1664
 
 def run():
@@ -150,12 +151,12 @@ def run():
             elif "/bobarium" in url_part:
                 bobarium()
                 REPONSE_COMMANDE = "<h1>commande = bobarium()</h1>"
-            elif "/gyro" in url_part:
-                gyro()
-                REPONSE_COMMANDE = "<h1>commande = gyro()</h1>"
-            elif "/stop" in url_part:
-                reculer()
-                REPONSE_COMMANDE = "<h1>commande = stop()</h1>"
+            elif "/angle_robot" in url_part:
+                angle_robot()
+                REPONSE_COMMANDE = "<h1>commande = angle_robot()</h1>"
+            elif "/angle_roue" in url_part:
+                angle_roue()
+                REPONSE_COMMANDE = "<h1>commande = angle_roue()</h1>"
             else:
                 print("Mauvais endpoint ;)")
                 REPONSE_COMMANDE = "<h1>ERREUR D'ENDPOINT !</h1>"
