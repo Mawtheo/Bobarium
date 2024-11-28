@@ -48,6 +48,9 @@ def gauche():
 def droite():
     robot.turn(10)
 
+def stop():
+    robot.hold()
+
 # Lever / Baisser la barre
 def barre():
     medium_m.run(-1000)
@@ -81,8 +84,14 @@ def gyro():
     angle = gyrosensor.speed()
     print("angle = ", angle, "°")
 
+    angle_G = left_m.speed()
+    print("angle = ", angle_G, "°")
+
+    angle_R = right_m.speed()
+    print("angle = ", angle_R, "°")
+
 # Adresse IP du robot
-ADRESSE = "192.168.1.153"
+ADRESSE = "192.168.1.166"
 PORT = 1664
 
 def run():
@@ -144,6 +153,9 @@ def run():
             elif "/gyro" in url_part:
                 gyro()
                 REPONSE_COMMANDE = "<h1>commande = gyro()</h1>"
+            elif "/stop" in url_part:
+                reculer()
+                REPONSE_COMMANDE = "<h1>commande = stop()</h1>"
             else:
                 print("Mauvais endpoint ;)")
                 REPONSE_COMMANDE = "<h1>ERREUR D'ENDPOINT !</h1>"

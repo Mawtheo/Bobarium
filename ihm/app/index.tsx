@@ -5,7 +5,7 @@
 import { Text, View, Button, StyleSheet, Image } from "react-native";
 
 // Adresse et port du serveur EV3
-const ADRESSE = "192.168.1.153";
+const ADRESSE = "192.168.1.166";
 const PORT = 1664;
 
 export default function Index() {
