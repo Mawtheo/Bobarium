@@ -2,14 +2,15 @@
  * BTS-CIEL2 :: CLIENT
  */
 
-import { Text, View, Button, StyleSheet} from "react-native";
+import React from 'react';
+import { Text, View, Button, StyleSheet } from "react-native";
 
 // Adresse et port du serveur EV3
-const ADRESSE = "192.168.1.170";
+const ADRESSE = "192.168.1.173";
 const PORT = 1664;
 
 export default function Index() {
-  const sendCommand = async (command: string) => {
+  const sendCommand = async (command) => {
     try {
       const response = await fetch(`http://${ADRESSE}:${PORT}/${command}`);
       if (response.ok) {
@@ -24,6 +25,7 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
+
       <Text>Théo et Valérian vous présente Bobarium !</Text>
 
       <View style={styles.commande}>
@@ -33,7 +35,7 @@ export default function Index() {
         <Button title="LED On" color="#4d6bff" onPress={() => sendCommand("led_on")} />
         <Button title="LED Off" color="#4d6bff" onPress={() => sendCommand("led_off")} />
         <Button title="Bobarium" color="#4d6bff" onPress={() => sendCommand("bobarium")} />
-        <Button title="Gyro" color="#4d6bff" onPress={() => sendCommand("gyro")} />
+        <Button title="Gyro" color="#4d6bff" onPress={() => sendCommand("angle_robot")} />
         <Button title="Angle roues" color="#4d6bff" onPress={() => sendCommand("angle_roue")} />
       </View>
 

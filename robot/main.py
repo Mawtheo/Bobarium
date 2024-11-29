@@ -34,20 +34,20 @@ ev3.speaker.play_file(SoundFile.READY)
 
 # Fonctions des ordres 
 def avancer():
-    left_m.run(1000)
-    right_m.run(1000)
+    left_m.run(500)
+    right_m.run(500)
 
 def reculer():
-    left_m.run(-1000)
-    right_m.run(-1000)
+    left_m.run(-500)
+    right_m.run(-500)
     
 def gauche():
-    left_m.run(-150)
-    right_m.run(150)
+    left_m.run_time(speed=-150, time=1000, wait=False)
+    right_m.run_time(speed=150, time=1000, wait=False)
 
 def droite():
-    left_m.run(150)
-    right_m.run(-150)
+    left_m.run_time(speed=150, time=1000, wait=False)
+    right_m.run_time(speed=-150, time=1000, wait=False)
 
 def stop():
     robot.stop()
@@ -91,8 +91,23 @@ def angle_roue():
     print("angle roue droite = ", angle_droit, "°")
     print("angle roue gauche = ", angle_gauche, "°")
 
+# chifrement XOR
+def chifrement(data, key):
+    result = bytearray()
+    for i in range(len(data)):
+        result.append(data[i] ^ key[i % len (key)])
+    return bytes(result)
+
+# Exemple d'utilisation
+data = b"Ceci est un test de chiffrement XOR"
+key = b"secret_key"
+encrypted_data = chifrement(data, key)
+print(encrypted_data)  # Affichera la sortie chiffrée
+decrypted_data = chifrement(encrypted_data, key)
+print(decrypted_data)
+
 # Adresse IP du robot
-ADRESSE = "192.168.1.170"
+ADRESSE = "192.168.1.173"
 PORT = 1664
 
 def run():
@@ -103,9 +118,10 @@ def run():
     serveur.bind((ADRESSE, PORT))
     serveur.listen(10)
 
+    client, adresse = serveur.accept()
+    print("Connexion établie avec", adresse)
+
     while True:
-        client, adresse = serveur.accept()
-        print("Connexion établie avec", adresse)
 
         # Réception de la requete du client sous forme de bytes et transformation en string
         requete = client.recv(1024)
