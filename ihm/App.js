@@ -1,12 +1,13 @@
 /**
- * BTS-CIEL2 :: CLIENT
+ * BTS-CIEL2 :: SERVEUR
  */
+
 
 import React from 'react';
 import { Text, View, Button, StyleSheet } from "react-native";
 
 // Adresse et port du serveur EV3
-const ADRESSE = "192.168.1.173";
+const ADRESSE = "10.0.0.6";
 const PORT = 1664;
 
 export default function Index() {
@@ -25,9 +26,7 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-
       <Text>Théo et Valérian vous présente Bobarium !</Text>
-
       <View style={styles.commande}>
         <Button title="Stop" color="#4d6bff" onPress={() => sendCommand("stop")} />
         <Button title="Barre" color="#4d6bff" onPress={() => sendCommand("barre")} />
@@ -38,7 +37,6 @@ export default function Index() {
         <Button title="Gyro" color="#4d6bff" onPress={() => sendCommand("angle_robot")} />
         <Button title="Angle roues" color="#4d6bff" onPress={() => sendCommand("angle_roue")} />
       </View>
-
       <View style={styles.avancer}>
         <Button title="Avancer" color="#ff8700" onPress={() => sendCommand("avancer")} />
       </View>
@@ -80,4 +78,4 @@ const styles = StyleSheet.create({
     bottom: 120,
     left: 100
   }
-})
+});
