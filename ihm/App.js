@@ -2,19 +2,21 @@
  * BTS-CIEL2 :: SERVEUR
  */
 
-
 import React from 'react';
 import { Text, View, Button, StyleSheet } from "react-native";
 
 // Adresse et port du serveur EV3
-const ADRESSE = "10.0.0.6";
+const ADRESSE = "127.0.0.1";
 const PORT = 1664;
 
 export default function Index() {
   const sendCommand = async (command) => {
     try {
       const response = await fetch(`http://${ADRESSE}:${PORT}/${command}`);
+      console.log("Etat de la réponse:", response.status);
       if (response.ok) {
+        const jsonResponse = await response.json();
+        console.log("JSON:", jsonResponse);
         console.log("Commande envoyée", "La commande a été envoyée avec succès.");
       } else {
         console.log("Erreur", "Impossible d'envoyer la commande.");
@@ -77,5 +79,5 @@ const styles = StyleSheet.create({
   droite: {
     bottom: 120,
     left: 100
-  }
+  },
 });

@@ -1,147 +1,104 @@
-#!/usr/bin/env pybricks-micropython
-
 """
 BTS-CIEL2 :: SERVEUR
 """
 
-# Librairies
-from pybricks.hubs import EV3Brick
-from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,
-                                 InfraredSensor, UltrasonicSensor, GyroSensor)
-from pybricks.parameters import Port, Stop, Direction, Button, Color
-from pybricks.tools import wait, StopWatch, DataLog
-from pybricks.robotics import DriveBase
-from pybricks.media.ev3dev import SoundFile, ImageFile
-
+# Libraries
 import socket
 import json
 
-# Initialisation des commandes du robot
-ev3 = EV3Brick()
-
-# Initialisation des moteurs
-left_m = Motor(Port.A, Direction.CLOCKWISE)
-right_m = Motor(Port.C, Direction.CLOCKWISE)
-medium_m = Motor(Port.B, Direction.CLOCKWISE)
-robot = DriveBase(left_m, right_m, wheel_diameter=55.5, axle_track=104)
-
-# Initialisation des capteurs
-ultrasonic = UltrasonicSensor(Port.S2)
-colorsensor = ColorSensor(Port.S3)
-gyrosensor = GyroSensor(Port.S4)
-
-# Son de boot
-ev3.speaker.play_file(SoundFile.READY)
-
-# Fonctions des ordres 
+# Simulated robot commands
 def avancer():
-    left_m.run(250)
-    right_m.run(250)
+    print("Robot is moving forward.")
 
 def reculer():
-    left_m.run(-250)
-    right_m.run(-250)
-    
+    print("Robot is moving backward.")
+
 def gauche():
-    left_m.run_time(speed=-250, time=800, wait=False)
-    right_m.run_time(speed=250, time=800, wait=False)
+    print("Robot is turning left.")
 
 def droite():
-    left_m.run_time(speed=250, time=800, wait=False)
-    right_m.run_time(speed=-250, time=800, wait=False)
+    print("Robot is turning right.")
 
 def stop():
-    robot.stop()
+    print("Robot has stopped.")
 
-# Lever / Baisser la barre
 def barre():
-    medium_m.run(-1000)
-    wait(1000)
-    medium_m.stop()
-    medium_m.run(1000)
-    wait(1000)
-    medium_m.stop()
+    print("Bar is moving up and down.")
 
 def led_on():
-    ev3.light.on(Color.RED)
+    print("LED is on.")
 
 def led_off():
-    ev3.light.off()
+    print("LED is off.")
 
-# Capteur ultrason permet de détecter les obstacles 
 def distance():
-    distance = ultrasonic.distance(silent=False)
-    print("distance = ", distance, "mm")
-    return distance
+    simulated_distance = 500  # Simulated distance in mm
+    print("Distance =", simulated_distance, "mm")
+    return simulated_distance
 
-# Taux de bobarium
 def bobarium():
-    taux = colorsensor.reflection()
-    if taux <= 10:
-        print("bobarium détecté = ", taux, "%")
-    else:
-        print("taux = ", taux, "%")
-    return taux
+    simulated_taux = 5  # Simulated bobarium level
+    print("Bobarium detected =", simulated_taux, "%")
+    return simulated_taux
 
-# Position angulaire du robot en degrès
 def angle_robot():
-    angle = gyrosensor.angle()
-    print("angle robot = ", angle, "°")
-    return angle
+    simulated_angle = 90  # Simulated robot angle in degrees
+    print("Robot angle =", simulated_angle, "°")
+    return simulated_angle
 
 def angle_roue():
-    angle_droit = right_m.angle()
-    angle_gauche = left_m.angle()
-    print("angle roue droite = ", angle_droit, "°")
-    print("angle roue gauche = ", angle_gauche, "°")
-    return angle_droit, angle_gauche
+    simulated_angle_droit = 45  # Simulated right wheel angle in degrees
+    simulated_angle_gauche = 45  # Simulated left wheel angle in degrees
+    print("Right wheel angle =", simulated_angle_droit, "°")
+    print("Left wheel angle =", simulated_angle_gauche, "°")
+    return simulated_angle_droit, simulated_angle_gauche
 
-# chifrement XOR
+# XOR encryption
 def chifrement(data, key):
     result = bytearray()
     for i in range(len(data)):
-        result.append(data[i] ^ key[i % len (key)])
+        result.append(data[i] ^ key[i % len(key)])
     return bytes(result)
 
-# Exemple d'utilisation
+# Example usage
 data = b"Ceci est un test de chiffrement XOR"
 key = b"secret_key"
 encrypted_data = chifrement(data, key)
-print(encrypted_data)  # Affichera la sortie chiffrée
+print(encrypted_data)  # Prints the encrypted data
 decrypted_data = chifrement(encrypted_data, key)
-print(decrypted_data)
+print(decrypted_data)  # Prints the decrypted data
 
-# Adresse IP du robot
-ADRESSE = "192.168.1.173"
+# Server address and port
+ADRESSE = "127.0.0.1"  # Localhost
 PORT = 1664
 
 def run():
-    # Création d'une socket
+    # Create a socket
     serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    # On demande à l'OS d'attacher notre programme au port TCP demandé
+    # Bind the socket to the address and port
     serveur.bind((ADRESSE, PORT))
     serveur.listen(1)
 
     while True:
         client, adresse = serveur.accept()
-        print("Connexion établie avec", adresse)
+        print("Connection established with", adresse)
 
         while True:
-            # Réception de la requete du client sous forme de bytes et transformation en string
+            # Receive the request from the client
             requete = client.recv(2048)
-            print("requete reçue: ", requete.decode())
+            print("Request received:", requete.decode())
 
-            # Réponse JSON à envoyer en HTTP
+            # JSON response to send in HTTP
             json_reponse = {}
 
-            # Traiter requêtes GET
+            # Handle GET requests
             if "GET" in requete.decode():
-                # Extraire l'URL de la requête
+                # Extract the URL part of the request
                 url_part = requete.decode().split(" ")[1]
                 print("URL:", url_part)
 
-                # Commandes du robot
+                # Robot commands
                 if "/avancer" in url_part:
                     avancer()
                     json_reponse = {"commande": "avancer"}
@@ -179,10 +136,10 @@ def run():
                     data = angle_roue()
                     json_reponse = {"commande": "angle_roue", "data": data}
                 else:
-                    print("Mauvais endpoint ;)")
+                    print("Invalid endpoint ;)")
                     json_reponse = {"commande": "erreur"}
 
-            # Envoi d'une réponse HTTP (réponse en JSON)
+            # Send an HTTP response (JSON response)
             reponse = "HTTP/1.1 200 OK\r\n"
             reponse += "Server: Sioux/1.3.3.7\r\n"
             reponse += "Content-Type: application/json\r\n"
@@ -190,15 +147,14 @@ def run():
             reponse += "\r\n"
             reponse += json.dumps(json_reponse)
 
-
             client.send(reponse.encode())
 
-        # Déconnexion avec le client
-        print("Fermeture de la connexion avec le client.")
+        # Close the connection with the client
+        print("Closing connection with the client.")
         client.close()
 
-        # Arrêt du serveur
-        print("Arrêt du serveur.")
+        # Stop the server
+        print("Stopping the server.")
         serveur.close()
 
 if __name__ == "__main__":
