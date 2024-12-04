@@ -107,9 +107,6 @@ def run():
     serveur.bind((ADRESSE, PORT))
     serveur.listen(1)
 
-    # Clé de chiffrement
-    KEY = b"&%Tv@SmMDR2597cL"
-
     while True:
         client, adresse = serveur.accept()
         print("Connexion établie avec", adresse)
@@ -131,43 +128,37 @@ def run():
                 # Commandes du robot
                 if "/avancer" in url_part:
                     avancer()
-                    json_reponse = {"commande": str(chifrement(KEY, b"avancer"))}
+                    json_reponse = {"commande": "avancer"}
                 elif "/reculer" in url_part:
                     reculer()
-                    json_reponse = {"commande": str(chifrement(KEY, b"reculer"))}
+                    json_reponse = {"commande": "reculer"}
                 elif "/gauche" in url_part:
                     gauche()
-                    json_reponse = {"commande": str(chifrement(KEY, b"gauche"))}
+                    json_reponse = {"commande": "gauche"}
                 elif "/droite" in url_part:
                     droite()
-                    json_reponse = {"commande": str(chifrement(KEY, b"droite"))}
+                    json_reponse = {"commande": "droite"}
                 elif "/stop" in url_part:
                     stop()
-                    json_reponse = {"commande": str(chifrement(KEY, b"stop"))}
+                    json_reponse = {"commande": "stop"}
                 elif "/barre" in url_part:
                     barre()
-                    json_reponse = {"commande": str(chifrement(KEY, b"barre"))}
+                    json_reponse = {"commande": "barre"}
                 elif "/led_on" in url_part:
                     led_on()
-                    json_reponse = {"commande": str(chifrement(KEY, b"led_on"))}
+                    json_reponse = {"commande": "led_on"}
                 elif "/led_off" in url_part:
                     led_off()
-                    json_reponse = {"commande": str(chifrement(KEY, b"led_off"))}
-                elif "/distance" in url_part:
-                    data = distance()
-                    json_reponse = {"commande": str(chifrement(KEY, b"distance")), "data": str(chifrement(KEY, bytes(data)))}
-                elif "/bobarium" in url_part:
-                    data = bobarium()
-                    json_reponse = {"commande": str(chifrement(KEY, b"bobarium")), "data": str(chifrement(KEY, bytes(data)))}
-                elif "/angle_robot" in url_part:
-                    data = angle_robot()
-                    json_reponse = {"commande": str(chifrement(KEY, b"angle_robot")), "data": str(chifrement(KEY, bytes(data)))}
-                elif "/angle_roue" in url_part:
-                    data = angle_roue()
-                    json_reponse = {"commande": str(chifrement(KEY, b"angle_roue")), "data": str(chifrement(KEY, bytes(data)))}
+                    json_reponse = {"commande": "led_off"}
+                elif "/capteurs" in url_part:
+                    data1 = distance()
+                    data2 = bobarium()
+                    data3 = angle_robot()
+                    data4 = angle_roue()
+                    json_reponse = {"commande": "capteurs", "distance": data1, "bobarium": data2, "angle_robot": data3, "angle_roue_droit": data4[0], "angle_roue_gauche": data4[1]}
                 else:
                     print("Mauvais endpoint ;)")
-                    json_reponse = {"commande": str(chifrement(KEY, b"erreur"))}
+                    json_reponse = {"commande": "erreur"}
 
             # Envoi d'une réponse HTTP (réponse en JSON)
             reponse = "HTTP/1.1 200 OK\r\n"

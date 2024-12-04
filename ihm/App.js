@@ -5,9 +5,10 @@
 import React, { useState } from 'react';
 import { Text, View, Button, StyleSheet } from "react-native";
 
-// Adresse et port du serveur EV3
+// Adresse et port du serveur EV3 et clé de déchiffrement
 const ADRESSE = "10.0.0.6";
 const PORT = 1664;
+
 
 export default function Index() {
 
@@ -21,7 +22,10 @@ export default function Index() {
       if (response.ok) {
         const jsonResponse = await response.json();
         console.log("JSON:", jsonResponse);
-        setcommandeText(JSON.stringify(jsonResponse, null, 2));
+
+        // Convertir la réponse JSON en une chaîne de caractères
+        const responseString = JSON.stringify(jsonResponse, null, 2);
+        setcommandeText(responseString);
       }
 
     } catch (error) {
@@ -36,12 +40,9 @@ export default function Index() {
       <View style={styles.commande}>
         <Button title="Stop" onPress={() => sendCommand("stop")} />
         <Button title="Barre"onPress={() => sendCommand("barre")} />
-        <Button title="Distance" onPress={() => sendCommand("distance")} />
         <Button title="LED On" onPress={() => sendCommand("led_on")} />
         <Button title="LED Off" onPress={() => sendCommand("led_off")} />
-        <Button title="Bobarium" onPress={() => sendCommand("bobarium")} />
-        <Button title="Gyro" onPress={() => sendCommand("angle_robot")} />
-        <Button title="Angle roues" onPress={() => sendCommand("angle_roue")} />
+        <Button title="Capteurs" onPress={() => sendCommand("capteurs")} />
       </View>
       <View style={styles.avancer}>
         <Button title="Avancer" color="#ff8700" onPress={() => sendCommand("avancer")} />
