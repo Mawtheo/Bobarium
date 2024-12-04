@@ -5,7 +5,7 @@
 import React, { useState } from 'react';
 import { Text, View, Button, StyleSheet } from "react-native";
 
-// Adresse et port du serveur EV3 et clé de déchiffrement
+// Adresse et port du serveur EV3
 const ADRESSE = "10.0.0.6";
 const PORT = 1664;
 
