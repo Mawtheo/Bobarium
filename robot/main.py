@@ -96,7 +96,7 @@ def chifrement(data, key):
     return bytes(result)
 
 # Adresse IP du robot
-ADRESSE = "192.168.1.173"
+ADRESSE = "192.168.1.116"
 PORT = 1664
 
 def run():
