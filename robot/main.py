@@ -35,12 +35,12 @@ ev3.speaker.play_file(SoundFile.READY)
 
 # Fonctions des ordres 
 def avancer():
-    left_m.run(250)
-    right_m.run(250)
+    left_m.run(400)
+    right_m.run(400)
 
 def reculer():
-    left_m.run(-250)
-    right_m.run(-250)
+    left_m.run(-400)
+    right_m.run(-400)
     
 def gauche():
     left_m.run_time(speed=-250, time=800, wait=False)
@@ -53,12 +53,15 @@ def droite():
 def stop():
     robot.stop()
 
-# Lever / Baisser la barre
-def barre():
-    medium_m.run(-1000)
+# Lever la barre
+def barre_up():
+    medium_m.run(1000)
     wait(1000)
     medium_m.stop()
-    medium_m.run(1000)
+
+# Baisser la barre
+def barre_down():
+    medium_m.run(-1000)
     wait(1000)
     medium_m.stop()
 
@@ -76,6 +79,7 @@ def distance():
 # Taux de bobarium
 def bobarium():
     taux = colorsensor.reflection()
+    taux = 100 - taux
     return taux
 
 # Position angulaire du robot en degrès
@@ -83,6 +87,7 @@ def angle_robot():
     angle = gyrosensor.angle()
     return angle
 
+# Angle des deux roues
 def angle_roue():
     angle_droit = right_m.angle()
     angle_gauche = left_m.angle()
@@ -141,9 +146,12 @@ def run():
                 elif "/stop" in url_part:
                     stop()
                     json_reponse = {"commande": "stop"}
-                elif "/barre" in url_part:
-                    barre()
-                    json_reponse = {"commande": "barre"}
+                elif "/barre_up" in url_part:
+                    barre_up()
+                    json_reponse = {"commande": "barre_up"}
+                elif "barre_down" in url_part:
+                    barre_down()
+                    json_reponse = {"commande": "barre_down"}
                 elif "/led_on" in url_part:
                     led_on()
                     json_reponse = {"commande": "led_on"}

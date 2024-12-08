@@ -4,13 +4,13 @@
     "slug": "bobarium",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/urss.png",
+    "icon": "./assets/tesla.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/urss.png",
+      "image": "./assets/tesla.png",
       "resizeMode": "contain",
-      "backgroundColor": "#f33030"
+      "backgroundColor": "#706eff"
     },
     "ios": {
       "supportsTablet": true

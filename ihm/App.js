@@ -3,16 +3,16 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Text, View, Button, StyleSheet } from "react-native";
+import { Text, View, Button, TextInput, StyleSheet } from "react-native";
 
 // Adresse et port du serveur EV3
-const ADRESSE = "192.168.1.116";
 const PORT = 1664;
 
 export default function Index() {
   const [commandeText, setcommandeText] = useState("Réception des commandes");
   const [sensorText, setSensorText] = useState("Données des capteurs");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [adresseIP, setAdresseIP] = useState("");
 
   useEffect(() => {
     let interval;
@@ -28,7 +28,7 @@ export default function Index() {
 
   const sendCommand = async (command) => {
     try {
-      const response = await fetch(`http://${ADRESSE}:${PORT}/${command}`);
+      const response = await fetch(`http://${adresseIP}:${PORT}/${command}`);
       console.log("Etat de la réponse:", response.status);
 
       if (response.ok) {
@@ -64,13 +64,22 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.ipInputContainer}>
+        <TextInput
+          style={styles.ipInput}
+          placeholder="Entrez l'adresse IP"
+          value={adresseIP}
+          onChangeText={setAdresseIP}
+          keyboardType="numeric"
+        />
+      </View>
       <View style={styles.refreshButtonContainer}>
         <Button title={isRefreshing ? "Arrêter Capteurs" : "Capteurs"} onPress={toggleRefreshing} />
       </View>
       <Text style={styles.sensorText}>{sensorText}</Text>
       <View style={styles.commande}>
-        <Button title="Stop" onPress={() => sendCommand("stop")} />
-        <Button title="Barre" onPress={() => sendCommand("barre")} />
+        <Button title="Barre_Up" onPress={() => sendCommand("barre_up")} />
+        <Button title="Barre_Down" onPress={() => sendCommand("barre_down")} />
         <Button title="LED On" onPress={() => sendCommand("led_on")} />
         <Button title="LED Off" onPress={() => sendCommand("led_off")} />
       </View>
@@ -86,6 +95,9 @@ export default function Index() {
       <View style={styles.droite}>
         <Button title="Droite" color="#ff8700" onPress={() => sendCommand("droite")} />
       </View>
+      <View style={styles.stop}>
+      <Button title="Stop" onPress={() => sendCommand("stop")} />
+      </View>
       <Text style={styles.commandeText}>{commandeText}</Text>
     </View>
   );
@@ -94,17 +106,29 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#d7ded9",
+    backgroundColor: "#dfdcdc",
     alignItems: "center",
   },
+  ipInputContainer: {
+    marginTop: 20,
+    marginBottom: 20,
+    width: "80%",
+  },
+  ipInput: {
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
   refreshButtonContainer: {
-    marginTop: 40,
+    marginTop: 20,
     marginBottom: 20,
   },
   sensorText: {
     marginTop: 20,
     padding: 10,
-    backgroundColor: "#fff",
+    backgroundColor: "#fffebf",
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "#ccc",
@@ -117,10 +141,10 @@ const styles = StyleSheet.create({
     alignItems: "stretch",
   },
   avancer: {
-    bottom: 60
+    bottom: 70
   },
   reculer: {
-    bottom: 0
+    bottom: -15
   },
   gauche: {
     bottom: 85,
@@ -129,6 +153,10 @@ const styles = StyleSheet.create({
   droite: {
     bottom: 120,
     left: 100
+  },
+  stop: {
+    bottom: 155,
+    right: 0,
   },
   commandeText: {
     marginTop: 20,
